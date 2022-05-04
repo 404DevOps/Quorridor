@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,14 +12,15 @@ public class Draggable : MonoBehaviour
     //Which Player can move this Object
     public int Owner;
 
-    // Start is called before the first frame update
+    #region Drag & Drop
     private void OnMouseDown()
     {
-        if (Owner != GameManager.Instance.currentPlayer)
+        if (!CanObjectBeMoved())
         {
             //TODO: play not allowed sound
             return;
         }
+       
 
         startPosition = transform.position;
         offset = transform.position - GetMouseWorldPos();
@@ -29,14 +31,14 @@ public class Draggable : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        if (Owner != GameManager.Instance.currentPlayer)
+        if (!CanObjectBeMoved())
         {
             //TODO: play not allowed sound
             return;
         }
 
+        //follow mouse
         this.transform.position = GetMouseWorldPos() + offset;
-        Debug.Log(this.name + "is being dragged to " + GetMouseWorldPos());
 
         //rotate only if its a wall
         if (CompareTag("Wall"))
@@ -73,4 +75,23 @@ public class Draggable : MonoBehaviour
         mousePos.z = Camera.main.WorldToScreenPoint(transform.position).z;
         return Camera.main.ScreenToWorldPoint(mousePos);
     }
+
+#endregion
+
+    #region Rules
+    private bool CanObjectBeMoved()
+    {
+        if (Owner != GameManager.Instance.currentPlayer)
+        {
+            return false;
+        }
+        if (CompareTag("Wall"))
+        {
+            if (GetComponent<Wall>().isPlaced)
+                return false;
+        }
+        return true;
+    }
+
+    #endregion
 }
