@@ -1,13 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Draggable : MonoBehaviour
 {
+    //lift and place
     public float liftHeight = 0.2f;
+    public float placedHeight = 0.03f;
+
     public Vector3 offset;
-    Vector3 startPosition;
+    public Vector3 currentPosition;
+
+    public int currentX;
+    public int currentY;
+
+    DropZone lastHitObject;
 
     //Which Player can move this Object
     public int Owner;
@@ -20,9 +29,9 @@ public class Draggable : MonoBehaviour
             //TODO: play not allowed sound
             return;
         }
-       
 
-        startPosition = transform.position;
+        GameManager.Instance.selectedObject = this.gameObject;
+        currentPosition = transform.position;
         offset = transform.position - GetMouseWorldPos();
 
         //lift on mouse down
@@ -37,6 +46,9 @@ public class Draggable : MonoBehaviour
             return;
         }
 
+        //raycast to check for droplocation
+        RayCastDropLocation();
+
         //follow mouse
         this.transform.position = GetMouseWorldPos() + offset;
 
@@ -50,6 +62,28 @@ public class Draggable : MonoBehaviour
         }
     }
 
+    void RayCastDropLocation()
+    {
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        int layermask = 1 << 3;
+        layermask = ~layermask;
+
+        //Debug.DrawRay(ray,Color.red);
+        if (Physics.Raycast(ray, out hit, 10f, layermask))
+        {
+            lastHitObject = hit.collider.gameObject.GetComponent<DropZone>(); ;
+            lastHitObject.RayCastEnter(this);
+        }
+        else
+        {
+            if (lastHitObject != null)
+            {
+                lastHitObject.RayCastExit();
+            }
+        }
+    }
+
     private void OnMouseUp()
     {
         if (Owner != GameManager.Instance.currentPlayer)
@@ -57,18 +91,64 @@ public class Draggable : MonoBehaviour
             //TODO: play not allowed sound
             return;
         }
-        //Detect What Field we're on
-        //check if dragged type is allowed to be placed
-        //place or return to default position
 
-        //if successfully placed, next players turn
-        if (CompareTag("Wall"))
-            gameObject.GetComponent<Wall>().isPlaced = true;
+        if (lastHitObject != null)
+        {
+            if (lastHitObject.IsValidDropLocation(this))
+            {
+                Debug.Log("Drop is Valid");
+                //if successfully placed, next players turn
+                if (CompareTag("Wall")) 
+                {
+                    gameObject.GetComponent<Wall>().isPlaced = true;
+                }
+                if (CompareTag("Player"))
+                {
+                    SnapPlayerToGrid(lastHitObject.xPos, lastHitObject.yPos);
+                }
+                if ((name == "Player1" && currentY == 9) || (name == "Player2" && currentY == 1))
+                {
+                    GameManager.Instance.GameOver(this.gameObject.name);
+                }
+                lastHitObject = null;
+                //change turn after each move
+                GameManager.Instance.NextPlayer();
+            }
+            else
+            {
+                //reset object if drop is not valid
+                transform.position = currentPosition;
+            }
+        }
 
-        GameManager.Instance.NextPlayer();
-
+        //reset current object
+        if (lastHitObject != null)
+        {
+            lastHitObject.RayCastExit();
+            lastHitObject = null;
+            transform.position = currentPosition;
+        }
+        else 
+        {
+            transform.position = currentPosition;
+        }
     }
 
+    void SnapPlayerToGrid(int x, int y)
+    {
+        if (x == currentX && y == currentY)
+        {
+            return;
+        }
+
+        currentX = x;
+        currentY = y;
+        var dropZone = FindObjectsOfType<DropZone>().FirstOrDefault(zone => zone.xPos == x && zone.yPos == y);
+        Vector3 newPlayerPosition =  dropZone.transform.position;
+        newPlayerPosition.y = placedHeight;
+        transform.position = newPlayerPosition;
+        currentPosition = newPlayerPosition;
+    }
     private Vector3 GetMouseWorldPos()
     {
         var mousePos = Input.mousePosition;
@@ -76,11 +156,15 @@ public class Draggable : MonoBehaviour
         return Camera.main.ScreenToWorldPoint(mousePos);
     }
 
-#endregion
+    #endregion
 
     #region Rules
     private bool CanObjectBeMoved()
     {
+        if (!GameManager.Instance.IsGameRunning)
+        {
+            return false;
+        }
         if (Owner != GameManager.Instance.currentPlayer)
         {
             return false;

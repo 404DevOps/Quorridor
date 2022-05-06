@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public GameObject selectedObject;
     public static GameManager Instance;
     //game info
     public int currentPlayer;
@@ -11,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     //references
     public HUD hud;
+
+    public bool IsGameRunning { get; internal set; }
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +27,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
         
         SetRandomPlayer();
+        IsGameRunning = true;
     }
 
     public void SetRandomPlayer()
@@ -47,5 +51,12 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    internal void GameOver(string name)
+    {
+        Debug.LogError(name + " won the Game!!");
+        IsGameRunning = false;
+        //Show Game Over HUD with Rematch Button.
     }
 }
