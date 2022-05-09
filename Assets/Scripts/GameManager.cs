@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public int currentPlayer;
     public int[] players = { 1, 2 };
 
+    public List<BlockedPath> blockedPaths;
+
     //references
     public HUD hud;
 
@@ -28,6 +30,7 @@ public class GameManager : MonoBehaviour
         
         SetRandomPlayer();
         IsGameRunning = true;
+        blockedPaths = new List<BlockedPath>();
     }
 
     public void SetRandomPlayer()

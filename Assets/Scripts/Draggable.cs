@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Draggable : MonoBehaviour
+public abstract class Draggable : MonoBehaviour
 {
     //lift and place
     public float liftHeight = 0.2f;
@@ -15,8 +15,6 @@ public class Draggable : MonoBehaviour
 
     public int currentX;
     public int currentY;
-
-    DropZone lastHitObject;
 
     //Which Player can move this Object
     public int Owner;
@@ -51,36 +49,9 @@ public class Draggable : MonoBehaviour
 
         //follow mouse
         this.transform.position = GetMouseWorldPos() + offset;
-
-        //rotate only if its a wall
         if (CompareTag("Wall"))
         {
-            if (Input.GetMouseButtonDown(1))
-            {
-                this.transform.Rotate(0, 0, 90);
-            }
-        }
-    }
-
-    void RayCastDropLocation()
-    {
-        RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        int layermask = 1 << 3;
-        layermask = ~layermask;
-
-        //Debug.DrawRay(ray,Color.red);
-        if (Physics.Raycast(ray, out hit, 10f, layermask))
-        {
-            lastHitObject = hit.collider.gameObject.GetComponent<DropZone>(); ;
-            lastHitObject.RayCastEnter(this);
-        }
-        else
-        {
-            if (lastHitObject != null)
-            {
-                lastHitObject.RayCastExit();
-            }
+            GetComponent<Wall>().Rotate();
         }
     }
 
@@ -92,63 +63,11 @@ public class Draggable : MonoBehaviour
             return;
         }
 
-        if (lastHitObject != null)
-        {
-            if (lastHitObject.IsValidDropLocation(this))
-            {
-                Debug.Log("Drop is Valid");
-                //if successfully placed, next players turn
-                if (CompareTag("Wall")) 
-                {
-                    gameObject.GetComponent<Wall>().isPlaced = true;
-                }
-                if (CompareTag("Player"))
-                {
-                    SnapPlayerToGrid(lastHitObject.xPos, lastHitObject.yPos);
-                }
-                if ((name == "Player1" && currentY == 9) || (name == "Player2" && currentY == 1))
-                {
-                    GameManager.Instance.GameOver(this.gameObject.name);
-                }
-                lastHitObject = null;
-                //change turn after each move
-                GameManager.Instance.NextPlayer();
-            }
-            else
-            {
-                //reset object if drop is not valid
-                transform.position = currentPosition;
-            }
-        }
-
-        //reset current object
-        if (lastHitObject != null)
-        {
-            lastHitObject.RayCastExit();
-            lastHitObject = null;
-            transform.position = currentPosition;
-        }
-        else 
-        {
-            transform.position = currentPosition;
-        }
+        if (DropObject())
+            GameManager.Instance.NextPlayer();
+        
     }
-
-    void SnapPlayerToGrid(int x, int y)
-    {
-        if (x == currentX && y == currentY)
-        {
-            return;
-        }
-
-        currentX = x;
-        currentY = y;
-        var dropZone = FindObjectsOfType<DropZone>().FirstOrDefault(zone => zone.xPos == x && zone.yPos == y);
-        Vector3 newPlayerPosition =  dropZone.transform.position;
-        newPlayerPosition.y = placedHeight;
-        transform.position = newPlayerPosition;
-        currentPosition = newPlayerPosition;
-    }
+   
     private Vector3 GetMouseWorldPos()
     {
         var mousePos = Input.mousePosition;
@@ -158,8 +77,8 @@ public class Draggable : MonoBehaviour
 
     #endregion
 
-    #region Rules
-    private bool CanObjectBeMoved()
+    #region Overrides
+    public virtual bool CanObjectBeMoved()
     {
         if (!GameManager.Instance.IsGameRunning)
         {
@@ -169,13 +88,12 @@ public class Draggable : MonoBehaviour
         {
             return false;
         }
-        if (CompareTag("Wall"))
-        {
-            if (GetComponent<Wall>().isPlaced)
-                return false;
-        }
+
         return true;
     }
+    public abstract void RayCastDropLocation();
+
+    public abstract bool DropObject();
 
     #endregion
 }

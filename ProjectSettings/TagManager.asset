@@ -12,9 +12,9 @@ TagManager:
   - MovableObjects
   - Water
   - UI
-  - 
-  - 
-  - 
+  - PlayerZone
+  - WallZoneHorizontal
+  - WallZoneVertical
   - 
   - 
   - 
