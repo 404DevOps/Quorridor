@@ -65,8 +65,8 @@ public class DropZone : MonoBehaviour
                 Debug.Log("Cannot Move Diagonal");
                 return false;
             }
-            
-            if(PathFinder.IsPathBlocked(drag.currentX,drag.currentY, xPos, yPos))
+
+            if (PathFinder.IsPathBlocked(drag.currentX, drag.currentY, xPos, yPos))
             {
                 Debug.Log("Path is blocked");
                 return false;
@@ -76,5 +76,15 @@ public class DropZone : MonoBehaviour
         return true;
     }
 
-   
+    public void VisualizePathFinding(Color color)
+    {
+        var renderer = GetComponent<Renderer>();
+        renderer.material.SetColor("_Color", color);
+    }
+
+    public void ResetColor()
+    {
+        var renderer = GetComponent<Renderer>();
+        renderer.material.SetColor("_Color", Color.white);
+    }
 }

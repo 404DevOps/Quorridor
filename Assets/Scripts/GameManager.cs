@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public int[] players = { 1, 2 };
 
     public List<BlockedPath> blockedPaths;
+    public PathFinder pathFinder;
 
     //references
     public HUD hud;
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
         SetRandomPlayer();
         IsGameRunning = true;
         blockedPaths = new List<BlockedPath>();
+        pathFinder = new PathFinder();
     }
 
     public void SetRandomPlayer()

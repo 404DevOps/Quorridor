@@ -113,7 +113,8 @@ public class Wall : Draggable
                 }
                 else 
                 {
-                    SnapWallToGrid(position);
+                    if (!SnapWallToGrid(position))
+                        return false;
                     ResetRaycast();
                     Debug.Log("Walldrop is Valid");
  
@@ -155,23 +156,14 @@ public class Wall : Draggable
 
         if (isHorizontal)
         {
-            //var horizontalParent = GameObject.Find("DropZonesWallHorizontal");
-            //leftDrop = horizontalParent.GetComponentsInChildren<DropZone>().FirstOrDefault(zone => zone.xPos == xLeft && zone.yPos == yLeft);
-            //rightDrop = horizontalParent.GetComponentsInChildren<DropZone>().FirstOrDefault(zone => zone.xPos == xRight && zone.yPos == yRight);
-
             var snapPosition = new Vector3();
             snapPosition.x = (rightDrop.transform.position.x + leftDrop.transform.position.x) / 2;
             snapPosition.z = leftDrop.transform.position.z;
             snapPosition.y = placedHeight;
-
             return snapPosition;
         }
         else
         {
-            //var verticalParent = GameObject.Find("DropZonesWallVertical");
-            //leftDrop = verticalParent.GetComponentsInChildren<DropZone>().FirstOrDefault(zone => zone.xPos == xLeft && zone.yPos == yLeft);
-            //rightDrop = verticalParent.GetComponentsInChildren<DropZone>().FirstOrDefault(zone => zone.xPos == xRight && zone.yPos == yRight);
-
             var snapPosition = new Vector3();
             snapPosition.z = (rightDrop.transform.position.z + leftDrop.transform.position.z) / 2;
             snapPosition.x = leftDrop.transform.position.x;
@@ -180,7 +172,7 @@ public class Wall : Draggable
         }
     }
 
-    private void SnapWallToGrid(Vector3 snapPosition)
+    private bool SnapWallToGrid(Vector3 snapPosition)
     {
         DropZone leftDrop = lastHitLeft;
         DropZone rightDrop = lastHitRight;
@@ -191,24 +183,74 @@ public class Wall : Draggable
             var blockedLeft = new BlockedPath(new Coordinates(leftDrop.xPos, leftDrop.yPos), new Coordinates(leftDrop.xPos, leftDrop.yPos + 1));
             var blockedRight = new BlockedPath(new Coordinates(rightDrop.xPos, rightDrop.yPos), new Coordinates(rightDrop.xPos, rightDrop.yPos + 1));
 
-            GameManager.Instance.blockedPaths.Add(blockedRight);
-            GameManager.Instance.blockedPaths.Add(blockedLeft);
+            if (IsPlayerPathBlocked(blockedLeft, blockedRight))
+            {
+                return false;
+            }
         }
         else 
         {
             transform.position = snapPosition;
-
             var blockedLeft = new BlockedPath(new Coordinates(leftDrop.xPos, leftDrop.yPos), new Coordinates(leftDrop.xPos + 1, leftDrop.yPos));
             var blockedRight = new BlockedPath(new Coordinates(rightDrop.xPos, rightDrop.yPos), new Coordinates(rightDrop.xPos + 1, rightDrop.yPos));
-            //Debug.Log("Blocked Path1 FROM: " + blockedLeft.From.xPos + " " + blockedLeft.From.yPos + " TO: " + blockedLeft.To.xPos + " " + blockedLeft.To.yPos);
-            //Debug.Log("Blocked Path2 FROM: " + blockedRight.From.xPos + " " + blockedRight.From.yPos + " TO: " + blockedRight.To.xPos + " " + blockedRight.To.yPos);
 
-            GameManager.Instance.blockedPaths.Add(blockedRight);
-            GameManager.Instance.blockedPaths.Add(blockedLeft);
+            if (IsPlayerPathBlocked(blockedLeft, blockedRight))
+            {
+                return false;
+            }
+        }
+        isPlaced = true;
+        return true;
+    }
+
+    private bool IsPlayerPathBlocked(BlockedPath blockedLeft, BlockedPath blockedRight)
+    {
+        Testing.ResetAllNodes();
+
+        GameManager.Instance.blockedPaths.Add(blockedRight);
+        GameManager.Instance.blockedPaths.Add(blockedLeft);
+
+        bool hasBlockedPath = false;
+        //check player 1
+        var p1 = GameObject.Find("Player1").GetComponent<Player>();
+        var p1EndZones = GetEndZonesForPlayer(1);
+        var p1Path = GameManager.Instance.pathFinder.FindPath(new Coordinates(p1.currentX, p1.currentY), p1EndZones.ToArray());
+        hasBlockedPath = p1Path != null ? false : true;
+        //Testing.ShowPath(p1Path, 1);
+
+        var p2 = GameObject.Find("Player2").GetComponent<Player>();
+        var p2EndZones = GetEndZonesForPlayer(2);
+        var p2Path = GameManager.Instance.pathFinder.FindPath(new Coordinates(p2.currentX, p2.currentY), p1EndZones.ToArray());
+        //if not already blocked, check if player 2 is blocked
+        if(!hasBlockedPath) hasBlockedPath = p2Path != null ? false : true;
+        //Testing.ShowPath(p2Path, 2);
+
+        if (hasBlockedPath)
+        {
+            GameManager.Instance.blockedPaths.Remove(blockedRight);
+            GameManager.Instance.blockedPaths.Remove(blockedLeft);
+
+            Debug.Log("Wall would Block Path");
+            AbortDrop();
+            return true;
         }
 
-        isPlaced = true;
-        Debug.Log("Wall has been placed succesfully");
+        return false;
+    }
+
+    private List<Coordinates> GetEndZonesForPlayer(int player)
+    {
+        int y;
+        List<Coordinates> endZones = new List<Coordinates>();
+
+        y = player == 1 ? 9 : 1;
+
+        for (int x = 1; x <= 9; x++)
+        {
+            endZones.Add(new Coordinates(x, y));
+        }
+
+        return endZones;
     }
 
     bool IsThereWall(Vector3 position)
