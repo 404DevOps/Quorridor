@@ -13383,7 +13383,8 @@ MonoBehaviour:
   lookAt: {fileID: 1082695494}
   playerOnePos: {x: 0, y: 0.6, z: 0.2}
   playerTwoPos: {x: 0, y: 0.6, z: -0.2}
-  rotationSpeed: 0
+  rotationSpeed: 0.5
+  scrollAmount: 0.05
   isPlayerOneTurn: 0
 --- !u!1 &988206429
 GameObject:
