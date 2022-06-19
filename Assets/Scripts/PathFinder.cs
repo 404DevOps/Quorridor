@@ -154,6 +154,8 @@ public class PathFinder
         int xDistance = Mathf.Abs(a.x - b.x);
         int yDistance = Mathf.Abs(a.y - b.y);
 
+        //node has lower cost if it moves trough player
+
         return MOVE_COST * (xDistance + yDistance);
     }
 
