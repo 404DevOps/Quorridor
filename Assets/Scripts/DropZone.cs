@@ -93,7 +93,7 @@ public class DropZone : MonoBehaviour
     private bool IsDiagonalJumpValid(Draggable drag, int diffX, int diffY)
     {
         var playerSelf = drag.gameObject.GetComponent<Player>();
-        var playerOther = GameObject.FindObjectsOfType<Player>().Where(p => p.name != playerSelf.name).FirstOrDefault();
+        var playerOther = FindObjectsOfType<Player>().Where(p => p.name != playerSelf.name).FirstOrDefault();
 
         var directionX = playerOther.currentX < playerSelf.currentX ? -1 : 1;
         directionX = playerOther.currentX == playerSelf.currentX ? 0 : directionX;

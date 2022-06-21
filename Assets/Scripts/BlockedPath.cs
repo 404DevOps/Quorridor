@@ -13,7 +13,7 @@ public class BlockedPath
     public Coordinates To;
 }
 
-public class Coordinates 
+public class Coordinates
 {
     public Coordinates(int x, int y)
     {
@@ -22,4 +22,22 @@ public class Coordinates
     }
     public int xPos;
     public int yPos;
+
+    public override string ToString()
+    {
+        return $"X = {xPos}, Y= {yPos}";
+    }
+    public override bool Equals(object obj)
+    {
+        if (obj is Coordinates)
+        {
+            var compCoords = (Coordinates)obj;
+            if (this.xPos == compCoords.xPos && this.yPos == compCoords.yPos)
+                return true;
+            else
+                return false;
+        }
+        return base.Equals(obj);
+    }
+
 }

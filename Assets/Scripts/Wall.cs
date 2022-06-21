@@ -11,6 +11,22 @@ public class Wall : Draggable
     internal DropZone lastHitLeft;
     internal DropZone lastHitRight;
 
+    private Coordinates placedLeft;
+    private Coordinates placedRight;
+
+    private BlockedPath presaveBlockedLeft;
+    private BlockedPath presaveBlockedRight;
+
+    private Color defaultColor;
+    private Renderer renderer;
+
+    private bool snapped = false;
+
+    private void Start()
+    {
+        renderer = GetComponent<Renderer>();
+        defaultColor = renderer.material.color;
+    }
     internal void Rotate()
     {
         if (Input.GetMouseButtonDown(1))
@@ -70,6 +86,9 @@ public class Wall : Draggable
             lastHitRight.RayCastEnter(this);
             lastHitLeft = hitleft.collider.gameObject.GetComponent<DropZone>();
             lastHitLeft.RayCastEnter(this);
+
+            //place ghost wall
+            SnapWall(true);
         }
         else if (lastHitRight != null && lastHitLeft != null)
         {
@@ -77,13 +96,72 @@ public class Wall : Draggable
             lastHitRight = null;
             lastHitLeft.RayCastExit();
             lastHitLeft = null;
+
+            //reset wall position
+            UnsnapWall();
+            Debug.Log("Not hitting Zones anymore");
+
         }
-
-
-        //Debug.DrawRay(rightRay.origin, rightRay.direction, Color.green);
-
-
     }
+
+    public void UnsnapWall()
+    {
+        TintWall(defaultColor.a, defaultColor);
+        var pos = transform.position;
+        pos.y = liftHeight;
+        this.transform.position = pos;
+        snapped = false;
+    }
+
+    public void SnapWall(bool isGhost)
+    {
+        bool invalidDrop = false;
+        if (lastHitLeft.IsValidDropLocation(this) && lastHitRight.IsValidDropLocation(this))
+        {
+            //drop locations need to be adjacent
+            var diffX = lastHitRight.xPos - lastHitLeft.xPos;
+            var diffY = lastHitRight.yPos - lastHitLeft.yPos;
+            if (diffX > 1 || diffX < -1 || diffY > 1 || diffY < -1)
+            {
+                Debug.Log("Dropzones not adjacent.");
+                invalidDrop = true;
+            }
+
+            var position = GetSnapPosition(lastHitLeft.xPos, lastHitLeft.yPos, lastHitRight.xPos, lastHitRight.yPos);
+
+            //snap to grid without actually placing it
+            if (!SnapWallToGrid(position))
+            {
+                invalidDrop = true;
+            }
+            if (IsThereWall(lastHitLeft.xPos, lastHitLeft.yPos, lastHitRight.xPos, lastHitRight.yPos, position))
+            {
+                Debug.Log("Already wall in that Position.");
+                invalidDrop = true;
+            }
+            //Tint snapped Wall accordingly
+            if (invalidDrop)
+            {
+                Debug.Log("Invalid Drop");
+                TintWall(0.5f, Color.red);
+                ResetRaycast();
+            }
+            else
+            {
+                TintWall(0.5f, Color.green);
+                Debug.Log("WallDrop is valid.");
+                snapped = true;
+            }
+        }
+    }
+
+    public void TintWall(float alpha, Color color)
+    {
+        var c = color;
+        c.a = alpha;
+        renderer.material.color = c;
+    }
+
 
     /// <summary>
     /// Tries to drop the Object
@@ -91,46 +169,71 @@ public class Wall : Draggable
     /// <returns>True if Object was successfully dropped.</returns>
     public override bool DropObject()
     {
-        if (lastHitLeft != null && lastHitRight != null)
+        if (snapped)
         {
-            if (lastHitLeft.IsValidDropLocation(this) && lastHitRight.IsValidDropLocation(this))
+            var snapPos = GetSnapPosition(lastHitLeft.xPos, lastHitLeft.yPos, lastHitRight.xPos, lastHitRight.yPos);
+            if (SnapWallToGrid(snapPos))
             {
-                //drop locations need to be adjacent
-                var diffX = lastHitRight.xPos - lastHitLeft.xPos;
-                var diffY = lastHitRight.yPos - lastHitLeft.yPos;
-                if (diffX > 1 || diffX < -1 || diffY > 1 || diffY < -1)
-                {
-                    AbortDrop();
-                    return false;
-                }
+                //Reset Tint, set placed to true
+                TintWall(defaultColor.a, defaultColor);
+                isPlaced = true;
+                placedLeft = new Coordinates(lastHitLeft.xPos, lastHitLeft.yPos);
+                placedRight = new Coordinates(lastHitRight.xPos, lastHitRight.yPos);
 
-                var position = GetSnapPosition(lastHitLeft.xPos, lastHitLeft.yPos, lastHitRight.xPos, lastHitRight.yPos);
+                GameManager.Instance.blockedPaths.Add(presaveBlockedLeft);
+                GameManager.Instance.blockedPaths.Add(presaveBlockedRight);
 
-                if (IsThereWall(position))
-                {
-                    AbortDrop();
-                    return false;
-                }
-                else 
-                {
-                    if (!SnapWallToGrid(position))
-                        return false;
-                    ResetRaycast();
-                    Debug.Log("Walldrop is Valid");
- 
-                    return true;
-                }
-
+                return true;
             }
         }
 
         AbortDrop();
+
+        //if (lastHitLeft != null && lastHitRight != null)
+        //{
+        //    if (lastHitLeft.IsValidDropLocation(this) && lastHitRight.IsValidDropLocation(this))
+        //    {
+        //        //drop locations need to be adjacent
+        //        var diffX = lastHitRight.xPos - lastHitLeft.xPos;
+        //        var diffY = lastHitRight.yPos - lastHitLeft.yPos;
+        //        if (diffX > 1 || diffX < -1 || diffY > 1 || diffY < -1)
+        //        {
+        //            AbortDrop();
+        //            return false;
+        //        }
+
+        //        var position = GetSnapPosition(lastHitLeft.xPos, lastHitLeft.yPos, lastHitRight.xPos, lastHitRight.yPos);
+
+        //        if (IsThereWall(position))
+        //        {
+        //            AbortDrop();
+        //            return false;
+        //        }
+        //        else 
+        //        {
+        //            if (!SnapWallToGrid(position))
+        //                return false;
+        //            ResetRaycast();
+        //            Debug.Log("Walldrop is Valid");
+
+        //            return true;
+        //        }
+
+        //    }
+        //}
+
+        //AbortDrop();
+        //return false;
+
         return false;
     }
 
     void AbortDrop()
     {
+        TintWall(defaultColor.a, defaultColor);
         transform.position = currentPosition;
+        presaveBlockedLeft = null;
+        presaveBlockedRight = null;
         ResetRaycast();
         ResetWallRotation();
     }
@@ -199,7 +302,7 @@ public class Wall : Draggable
                 return false;
             }
         }
-        isPlaced = true;
+        //isPlaced = true;
         return true;
     }
 
@@ -216,26 +319,33 @@ public class Wall : Draggable
         var p1EndZones = GetEndZonesForPlayer(1);
         var p1Path = GameManager.Instance.pathFinder.FindPath(new Coordinates(p1.currentX, p1.currentY), p1EndZones.ToArray());
         hasBlockedPath = p1Path != null ? false : true;
-        //Testing.ShowPath(p1Path, 1);
+        Testing.ShowPath(p1Path, 1);
 
         var p2 = GameObject.Find("Player2").GetComponent<Player>();
         var p2EndZones = GetEndZonesForPlayer(2);
         var p2Path = GameManager.Instance.pathFinder.FindPath(new Coordinates(p2.currentX, p2.currentY), p1EndZones.ToArray());
         //if not already blocked, check if player 2 is blocked
         if(!hasBlockedPath) hasBlockedPath = p2Path != null ? false : true;
-        //Testing.ShowPath(p2Path, 2);
+        Testing.ShowPath(p2Path, 2);
+
+        //Remove anyways, only place in dropobject
+        GameManager.Instance.blockedPaths.Remove(blockedRight);
+        GameManager.Instance.blockedPaths.Remove(blockedLeft);
 
         if (hasBlockedPath)
         {
-            GameManager.Instance.blockedPaths.Remove(blockedRight);
-            GameManager.Instance.blockedPaths.Remove(blockedLeft);
-
             Debug.Log("Wall would Block Path");
-            AbortDrop();
+            presaveBlockedLeft = null;
+            presaveBlockedRight = null;
+            //AbortDrop();
             return true;
         }
-
-        return false;
+        else 
+        {
+            presaveBlockedLeft = blockedLeft;
+            presaveBlockedRight = blockedRight;
+            return false;
+        }
     }
 
     private List<Coordinates> GetEndZonesForPlayer(int player)
@@ -253,16 +363,59 @@ public class Wall : Draggable
         return endZones;
     }
 
-    bool IsThereWall(Vector3 position)
+    //bool IsThereWall(Vector3 position)
+    //{
+    //    //TODO, Check for Overlapping Walls.
+    //    var walls = GameObject.FindGameObjectsWithTag("Wall");
+    //    foreach (var wall in walls)
+    //    {
+    //        if (position == wall.transform.position)
+    //        {
+    //            Debug.Log("There is already a Wall on that Position");
+    //            return true;
+    //        }   
+    //    }
+
+    //    return false;
+    //}
+    bool IsThereWall(int xLeft, int yLeft, int xRight, int yRight, Vector3 snapPos)
     {
+        var coordsLeft = new Coordinates(xLeft, yLeft);
+        var coordsRight = new Coordinates(xRight, yRight);
+        //TODO, Check for Overlapping Walls.
         var walls = GameObject.FindGameObjectsWithTag("Wall");
         foreach (var wall in walls)
         {
-            if (position == wall.transform.position)
-            {
-                Debug.Log("There is already a Wall on that Position");
+            if (snapPos == wall.transform.position && wall != this.gameObject)
                 return true;
-            }   
+            var w = wall.GetComponent<Wall>();
+            //check only for placed walls
+            if (w.isPlaced)
+            {
+                if (w.isHorizontal == isHorizontal)
+                {
+                    if (w.placedLeft.Equals(coordsLeft) || w.placedRight.Equals(coordsLeft))
+                    {
+                        Debug.Log("Left Edge interfered with placed Wall.");
+                        return true;
+                    }
+                    if (w.placedLeft.Equals(coordsRight) || w.placedRight.Equals(coordsRight))
+                    {
+                        Debug.Log("Right Edge interfered with placed Wall.");
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (w.placedLeft.xPos == coordsLeft.xPos && w.placedLeft.yPos == (coordsLeft.yPos + 1) && w.placedRight.xPos == (coordsRight.xPos - 1) && w.placedRight.yPos == coordsRight.yPos)
+                        return true;
+                    if (w.placedLeft.xPos == coordsLeft.xPos && w.placedLeft.yPos == (coordsLeft.yPos - 1) && w.placedRight.xPos == (coordsRight.xPos + 1) && w.placedRight.yPos == coordsRight.yPos)
+                        return true;
+
+                    Debug.Log("Placed Wall L: " + w.placedLeft + " R: " + w.placedRight);
+                    Debug.Log("Coords L:" + coordsLeft + "R " + coordsRight);
+                }
+            }
         }
 
         return false;
