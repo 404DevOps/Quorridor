@@ -44,7 +44,7 @@ public static class Testing
     {
         if (path == null || path.Count == 0)
         {
-            Debug.Log("No Path to Draw.");
+            //no path to draw
             return;
         }
 

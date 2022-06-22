@@ -11,6 +11,9 @@ public class PathFinder
     private List<PathNode> openList;
     private List<PathNode> closedList;
 
+    private List<PathNode> endNodesOpenList;
+    private List<PathNode> endNodesClosedList;
+
     public PathFinder()
     {
     }
@@ -28,6 +31,9 @@ public class PathFinder
 
     public List<PathNode> FindPath(Coordinates start, Coordinates[] end)
     {
+        endNodesOpenList = new List<PathNode>();
+        endNodesClosedList = new List<PathNode>();
+
         if (grid == null)
             FillGrid();
 
@@ -55,46 +61,54 @@ public class PathFinder
                 pathNode.cameFromNode = null;
             }
         }
+        endNodesOpenList = endNodes;
 
-        var closestEndNode = GetLowestFCostNode(endNodes);
-
-        startNode.gCost = 0;
-        startNode.hCost = CalculateDistanceCost(startNode, closestEndNode);
-        startNode.CalculateFCost();
-
-        while (openList.Count > 0)
+        //iterate all end nodes if closest one doesnt find path, needs to check others.
+        while (endNodesOpenList.Count > 0)
         {
-            //something with node iteration is not quite right yet
-            //Debug.LogError("Fix this");
-            //return null;
-            PathNode currentNode = GetLowestFCostNode(openList);
-            
-            if (currentNode.x == closestEndNode.x && currentNode.y == closestEndNode.y)
+            //check lowest cost end node
+            var closestEndNode = GetLowestFCostNode(endNodesOpenList);
+
+            startNode.gCost = 0;
+            startNode.hCost = CalculateDistanceCost(startNode, closestEndNode);
+            startNode.CalculateFCost();
+
+            while (openList.Count > 0)
             {
-                //reached final node
-                return CalculatePath(currentNode);
-            }
+                PathNode currentNode = GetLowestFCostNode(openList);
 
-            openList.Remove(currentNode);
-            closedList.Add(currentNode);
-
-            foreach (var neighbourNode in GetNeighbourList(currentNode))
-            {
-                if (closedList.Contains(neighbourNode)) continue;
-
-                int tentativeGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighbourNode);
-                if (tentativeGCost < neighbourNode.gCost) 
+                if (currentNode.x == closestEndNode.x && currentNode.y == closestEndNode.y)
                 {
-                    neighbourNode.cameFromNode = currentNode;
-                    neighbourNode.gCost = tentativeGCost;
-                    neighbourNode.hCost = CalculateDistanceCost(neighbourNode, closestEndNode);
-                    neighbourNode.CalculateFCost();
+                    //reached final node
+                    return CalculatePath(currentNode);
+                }
 
-                    if (!openList.Contains(neighbourNode))
-                        openList.Add(neighbourNode);
+                openList.Remove(currentNode);
+                closedList.Add(currentNode);
+
+
+                foreach (var neighbourNode in GetNeighbourList(currentNode))
+                {
+                    if (closedList.Contains(neighbourNode)) continue;
+
+                    int tentativeGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighbourNode);
+                    if (tentativeGCost < neighbourNode.gCost)
+                    {
+                        neighbourNode.cameFromNode = currentNode;
+                        neighbourNode.gCost = tentativeGCost;
+                        neighbourNode.hCost = CalculateDistanceCost(neighbourNode, closestEndNode);
+                        neighbourNode.CalculateFCost();
+
+                        if (!openList.Contains(neighbourNode))
+                            openList.Add(neighbourNode);
+                    }
                 }
             }
+
+            //no path found for endnode
+            endNodesOpenList.Remove(endNodesOpenList.Where(n => n.x == closestEndNode.x && n.y == closestEndNode.y).FirstOrDefault());
         }
+
         // out of nodes on openlist
         return null;
     }
@@ -154,7 +168,7 @@ public class PathFinder
         int xDistance = Mathf.Abs(a.x - b.x);
         int yDistance = Mathf.Abs(a.y - b.y);
 
-        //node has lower cost if it moves trough player
+        //todo: node has lower cost if it moves trough player
 
         return MOVE_COST * (xDistance + yDistance);
     }

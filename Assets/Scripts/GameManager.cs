@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     public List<BlockedPath> blockedPaths;
     public PathFinder pathFinder;
 
+    public GameObject endGameMenu;
+
     //references
     public HUD hud;
 
@@ -60,8 +62,12 @@ public class GameManager : MonoBehaviour
 
     internal void GameOver(string name)
     {
-        Debug.LogError(name + " won the Game!!");
+        
+        var screen = endGameMenu.GetComponent<EndScreen>();
+        screen.WinnerName = name;
+        endGameMenu.SetActive(true);
         IsGameRunning = false;
+
         //Show Game Over HUD with Rematch Button.
     }
 }
