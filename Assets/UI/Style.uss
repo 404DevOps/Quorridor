@@ -29,3 +29,12 @@
     background-color: rgb(115, 114, 114);
     -unity-font: url('/Assets/UI/neon.ttf');
 }
+
+.title-font {
+    align-items: center;
+    -unity-text-align: upper-center;
+    -unity-font: none;
+    -unity-font-definition: url('/Assets/UI/neon SDF.asset');
+    font-size: 93px;
+    color: rgb(255, 255, 255);
+}

@@ -1,0 +1,58 @@
+{
+  "Pages":[
+    {
+      "pageNumber": 0,
+      "text": "The Game starts with 10 Fences per Player. Each turn, a player chooses to move his pawn or to put up one of his fences. When he has run out of fences, the player must move his pawn. \\n \\n Hold Left Mouse Button to drag Objects. While doing so, fences can be rotated by 90 degrees when pressing the Right Mouse Button.",
+      "hasImage": false,
+      "imagePath": ""
+    },
+    {
+      "pageNumber": 1,
+      "text": "A draw will determine who starts first. Your Goal is to reach the other Side of the Board while hindering your Opponent to do so.",
+      "imagePath": "game1",
+      "hasImage": true
+    },
+    {
+      "pageNumber": 2,
+      "text": "The pawns are moved one square at a time, horizontally or vertically, forwards or backwards, never diagonally.",
+      "imagePath": "game2",
+      "hasImage": true
+    },
+    {
+      "pageNumber": 3,
+      "text": "The pawns cannot move trough fences, they always have to move around them.",
+      "imagePath": "game3",
+      "hasImage": true
+    },
+    {
+      "pageNumber": 4,
+      "text": "The fences must be placed between 2 sets of 2 squares. By placing fences, you force your opponent to move around it and increase the number of moves they need to make.",
+      "imagePath": "game4",
+      "hasImage": true
+    },
+    {
+      "pageNumber": 5,
+      "text": "But be careful, you are not allowed to lock up your opponents pawn, it must always be able to reach it's goal.",
+      "imagePath": "game5",
+      "hasImage": true
+    },
+    {
+      "pageNumber": 6,
+      "text": "When two pawns face each other on neighboring squares which are not separated by a fence, the player whose turn it is can jump the opponent's pawn.",
+      "imagePath": "game6",
+      "hasImage": true
+    },
+    {
+      "pageNumber": 7,
+      "text": "The first player who reaches one of the 9 squares opposite to his starting position is the winner.",
+      "imagePath": "game7",
+      "hasImage": true
+    },
+    {
+      "pageNumber": 8,
+      "text": "If there is a fence behind a pawn that is jumped over, the player can place his pawn to the left or the right of the other pawn.",
+      "imagePath": "game8",
+      "hasImage": true
+    }
+  ]
+}

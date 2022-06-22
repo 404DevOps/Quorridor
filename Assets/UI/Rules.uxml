@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="Style.uss" />
+    <ui:VisualElement name="root" style="flex-grow: 1;">
+        <ui:Button text="X" display-tooltip-when-elided="true" name="ExitButton" enable-rich-text="false" tooltip="Close Rules" class="button" style="position: absolute; top: 5px; left: auto; right: 5px; padding-left: 7px; padding-right: 7px; padding-top: 5px; padding-bottom: 5px; margin-top: 0; white-space: normal; overflow: visible; flex-grow: 1; flex-shrink: 1; flex-direction: column; flex-wrap: nowrap; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;" />
+        <ui:Label text="Rules" display-tooltip-when-elided="true" name="RulesTitle" picking-mode="Ignore" class="title-font" />
+        <ui:VisualElement name="Container" style="flex-grow: 1; padding-left: 10px; padding-right: 10px; padding-top: 0; padding-bottom: 10px;">
+            <ui:VisualElement name="textarea" style="flex-grow: 1; background-color: rgb(255, 255, 255); padding-left: 15px; padding-right: 15px; padding-top: 15px; padding-bottom: 15px; flex-direction: column; flex-wrap: nowrap; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; align-items: center; flex-shrink: 1;">
+                <ui:ScrollView style="flex-grow: 1; flex-direction: column; flex-wrap: nowrap; align-items: center;">
+                    <ui:VisualElement name="imageContainer" style="flex-grow: 1; flex-shrink: 0;">
+                        <ui:VisualElement name="ruleImage" style="-unity-background-scale-mode: scale-to-fit; background-image: resource(&apos;game8&apos;); flex-grow: 1; flex-direction: column; flex-wrap: nowrap; min-width: 75px; min-height: 75px; margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; -unity-background-image-tint-color: rgb(255, 255, 255);" />
+                    </ui:VisualElement>
+                    <ui:Label text="Each player in turn, chooses to move his pawn or to put up one of his fences. When he has run out of fences, the player must move his pawn.&#10;&#10;At the beginning the board is empty. Choose and place your pawn in the center of the first line of your side of the board, your opponent takes another pawn and places it in the center of the first line of his side of the board (the one facing yours). Then take 10 fences each." display-tooltip-when-elided="true" name="ruleText" style="flex-grow: 1; -unity-text-align: upper-center; white-space: normal; -unity-font-style: bold; color: rgb(0, 0, 0); flex-shrink: 1; flex-wrap: wrap;" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+            <ui:VisualElement name="Navigation" style="align-items: center; flex-direction: row;">
+                <ui:Button text="&lt;&lt;&lt;" display-tooltip-when-elided="true" name="PreviousPage" class="button" style="flex-grow: 1;" />
+                <ui:Button text="&gt;&gt;&gt;" display-tooltip-when-elided="true" name="NextPage" class="button" style="flex-grow: 1;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

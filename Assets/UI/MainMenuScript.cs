@@ -10,8 +10,9 @@ public class MainMenuScript : MonoBehaviour
     private Button startButton;
     private Button rulesButton;
 
+    public GameObject rulesPanel;
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         root = GetComponent<UIDocument>().rootVisualElement;
         startButton = root.Q<Button>("StartButton");
@@ -27,6 +28,7 @@ public class MainMenuScript : MonoBehaviour
     }
     void RulesButtonClicked()
     {
-        SceneManager.LoadScene("Rules", LoadSceneMode.Single);
+        rulesPanel.SetActive(true);
+        this.gameObject.SetActive(false);
     }
 }
