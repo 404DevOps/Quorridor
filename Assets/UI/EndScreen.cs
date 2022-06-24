@@ -19,7 +19,9 @@ public class EndScreen : MonoBehaviour
         backToMenu = root.Q<Button>("BackToMenu");
         playerWonText = root.Q<Label>("PlayerWon");
 
-        playerWonText.text = WinnerName + " wins the Game!";
+        int player = WinnerName == "Player1" ? 1 : 2;
+        playerWonText.text = "Player " + player + " wins the Game!";
+        playerWonText.style.color = player == 1 ? Color.yellow : Color.blue;
         backToMenu.clicked += BackToMenu;
         
     }

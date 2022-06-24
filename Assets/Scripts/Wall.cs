@@ -284,12 +284,12 @@ public class Wall : Draggable
         hasBlockedPath = p1Path != null ? false : true;
         Testing.ShowPath(p1Path, 1);
 
-        var p2 = GameObject.Find("Player2").GetComponent<Player>();
-        var p2EndZones = GetEndZonesForPlayer(2);
-        var p2Path = GameManager.Instance.pathFinder.FindPath(new Coordinates(p2.currentX, p2.currentY), p2EndZones.ToArray());
-        //if not already blocked, check if player 2 is blocked
-        if(!hasBlockedPath) hasBlockedPath = p2Path != null ? false : true;
-        Testing.ShowPath(p2Path, 2);
+        //var p2 = GameObject.Find("Player2").GetComponent<Player>();
+        //var p2EndZones = GetEndZonesForPlayer(2);
+        //var p2Path = GameManager.Instance.pathFinder.FindPath(new Coordinates(p2.currentX, p2.currentY), p2EndZones.ToArray());
+        ////if not already blocked, check if player 2 is blocked
+        //if(!hasBlockedPath) hasBlockedPath = p2Path != null ? false : true;
+        //Testing.ShowPath(p2Path, 2);
 
         //Remove anyways, only place in dropobject
         GameManager.Instance.blockedPaths.Remove(blockedRight);

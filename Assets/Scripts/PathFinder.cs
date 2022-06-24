@@ -48,19 +48,7 @@ public class PathFinder
             node.CalculateFCost();
         }
 
-        openList = new List<PathNode> { startNode };
-        closedList = new List<PathNode>();
 
-        for (int x = 1; x < 10; x++)
-        {
-            for (int y = 1; y < 10; y++)
-            {
-                PathNode pathNode = GetNode(x, y);
-                pathNode.gCost = int.MaxValue;
-                pathNode.CalculateFCost();
-                pathNode.cameFromNode = null;
-            }
-        }
         endNodesOpenList = endNodes;
 
         //iterate all end nodes if closest one doesnt find path, needs to check others.
@@ -68,6 +56,20 @@ public class PathFinder
         {
             //check lowest cost end node
             var closestEndNode = GetLowestFCostNode(endNodesOpenList);
+
+            openList = new List<PathNode> { startNode };
+            closedList = new List<PathNode>();
+
+            for (int x = 1; x < 10; x++)
+            {
+                for (int y = 1; y < 10; y++)
+                {
+                    PathNode pathNode = GetNode(x, y);
+                    pathNode.gCost = int.MaxValue;
+                    pathNode.CalculateFCost();
+                    pathNode.cameFromNode = null;
+                }
+            }
 
             startNode.gCost = 0;
             startNode.hCost = CalculateDistanceCost(startNode, closestEndNode);
