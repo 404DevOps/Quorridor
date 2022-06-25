@@ -49,18 +49,6 @@ public class RulesScript : MonoBehaviour
         LoadPage(currentPage);
     }
 
-    //private void CreateRuleBook()
-    //{
-    //    var book = new Rulebook();
-    //    book.Pages = new List<RulePage>();
-
-    //    book.Pages.Add(new RulePage { pageNumber = 1, imagepath = "asdf.jpg", text = "lorem ipsum", hasImage = false });
-    //    book.Pages.Add(new RulePage { pageNumber = 2, imagepath = "asdf.jpg", text = "lorem ipsum", hasImage = false });
-
-    //    var json = JsonUtility.ToJson(book);
-    //    Debug.Log(json);
-    //}
-
     void LoadPage(int pageNumber)
     {
         Debug.Log("Page: " + pageNumber);
@@ -70,7 +58,7 @@ public class RulesScript : MonoBehaviour
         if (page.hasImage)
         {
             ruleImage.style.display = DisplayStyle.Flex;
-            ruleImage.style.backgroundImage = Background.FromTexture2D(Resources.Load<Texture2D>(page.imagePath));
+            ruleImage.style.backgroundImage = Background.FromTexture2D(Resources.Load<Texture2D>("Cropped/" + page.imagePath));
         }
         else 
         {
