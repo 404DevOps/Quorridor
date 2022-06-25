@@ -1,8 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="Style.uss" />
-    <ui:VisualElement name="Root" style="justify-content: center; align-items: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; flex-grow: 1;">
-        <ui:VisualElement name="Container" style="align-items: stretch; max-width: 500px; max-height: 200px; min-width: 300px; min-height: 100px; margin-top: -67px;">
-            <ui:Label text="Quorridor" display-tooltip-when-elided="true" name="QuorridorTitle" class="title-font" />
+    <ui:VisualElement name="Root" style="justify-content: center; align-items: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; flex-grow: 1; background-image: resource(&apos;pexels_table&apos;);">
+        <ui:VisualElement name="Container" style="align-items: stretch; max-width: 1053px; max-height: 258px; min-width: 507px; min-height: 100px; margin-top: -112px;">
+            <ui:Label text="Quorridor" display-tooltip-when-elided="true" name="QuorridorTitle" class="title-font" style="font-size: 136px;" />
             <ui:Button text="Start Game" display-tooltip-when-elided="true" name="StartButton" class="button" />
             <ui:Button text="Rules" display-tooltip-when-elided="true" name="RulesButton" class="button" />
         </ui:VisualElement>

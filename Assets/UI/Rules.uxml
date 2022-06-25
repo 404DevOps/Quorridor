@@ -1,9 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="Style.uss" />
-    <ui:VisualElement name="root" style="flex-grow: 1;">
+    <ui:VisualElement name="root" style="flex-grow: 1; background-image: resource(&apos;pexels_table&apos;);">
         <ui:Button text="X" display-tooltip-when-elided="true" name="ExitButton" enable-rich-text="false" tooltip="Close Rules" class="button" style="position: absolute; top: 5px; left: auto; right: 5px; padding-left: 7px; padding-right: 7px; padding-top: 5px; padding-bottom: 5px; margin-top: 0; white-space: normal; overflow: visible; flex-grow: 1; flex-shrink: 1; flex-direction: column; flex-wrap: nowrap; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;" />
         <ui:Label text="Rules" display-tooltip-when-elided="true" name="RulesTitle" picking-mode="Ignore" class="title-font" />
-        <ui:VisualElement name="Container" style="flex-grow: 1; padding-left: 10px; padding-right: 10px; padding-top: 0; padding-bottom: 10px;">
+        <ui:VisualElement name="Container" style="flex-grow: 1; padding-left: 80px; padding-right: 80px; padding-top: 30px; padding-bottom: 80px;">
             <ui:VisualElement name="textarea" style="flex-grow: 1; background-color: rgb(255, 255, 255); padding-left: 15px; padding-right: 15px; padding-top: 15px; padding-bottom: 15px; flex-direction: column; flex-wrap: nowrap; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; align-items: center; flex-shrink: 1;">
                 <ui:ScrollView style="flex-grow: 1; flex-direction: column; flex-wrap: nowrap; align-items: center;">
                     <ui:VisualElement name="imageContainer" style="flex-grow: 1; flex-shrink: 0;">

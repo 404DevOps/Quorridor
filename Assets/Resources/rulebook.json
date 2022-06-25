@@ -2,7 +2,7 @@
   "Pages":[
     {
       "pageNumber": 0,
-      "text": "The Game starts with 10 Fences per Player. Each turn, a player chooses to move his pawn or to put up one of his fences. When he has run out of fences, the player must move his pawn. \\n \\n Hold Left Mouse Button to drag Objects. While doing so, fences can be rotated by 90 degrees when pressing the Right Mouse Button.",
+      "text": "The Game starts with 10 Fences per Player. Each turn, a player chooses to move his pawn or to put up one of his fences. When he has run out of fences, the player must move his pawn. \\n \\n Hold Left Mouse Button to drag Objects. While doing so, fences can be rotated by 90 degrees by pressing the Right Mouse Button. \\n \\n For better View, move the Camera by Holding & Dragging the Right Mouse Button.",
       "hasImage": false,
       "imagePath": ""
     },

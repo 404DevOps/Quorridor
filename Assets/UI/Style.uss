@@ -10,8 +10,16 @@
     padding-top: 16px;
     padding-bottom: 16px;
     color: rgb(0, 0, 0);
-    background-color: rgb(176, 176, 176);
+    background-color: rgb(255, 255, 255);
     -unity-font: url('/Assets/UI/neon.ttf');
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(0, 0, 0, 0.43);
+    border-right-color: rgba(0, 0, 0, 0.43);
+    border-top-color: rgba(0, 0, 0, 0.43);
+    border-bottom-color: rgba(0, 0, 0, 0.43);
 }
 
 .button:hover {
@@ -26,7 +34,7 @@
     padding-top: 16px;
     padding-bottom: 16px;
     color: rgb(0, 0, 0);
-    background-color: rgb(115, 114, 114);
+    background-color: rgb(229, 229, 229);
     -unity-font: url('/Assets/UI/neon.ttf');
 }
 
@@ -37,4 +45,8 @@
     -unity-font-definition: url('/Assets/UI/neon SDF.asset');
     font-size: 93px;
     color: rgb(255, 255, 255);
+    -unity-font-style: normal;
+    -unity-text-outline-color: rgba(0, 0, 0, 255);
+    text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.52);
+    -unity-text-outline-width: 0;
 }
