@@ -23,6 +23,9 @@ public class EndScreen : MonoBehaviour
         playerWonText.text = "Player " + player + " wins the Game!";
         playerWonText.style.color = player == 1 ? Color.yellow : Color.blue;
         backToMenu.clicked += BackToMenu;
+
+        //disable HUD
+        FindObjectOfType<HUDScript>().gameObject.SetActive(false);
         
     }
 

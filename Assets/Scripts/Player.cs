@@ -18,26 +18,47 @@ public class Player : Draggable
         {
             lastHitObject = hit.collider.gameObject.GetComponent<DropZone>(); ;
             lastHitObject.RayCastEnter(this);
+            SnapPlayer();
         }
         else
         {
             if (lastHitObject != null)
             {
                 lastHitObject.RayCastExit();
+                UnsnapPlayer();
             }
+        }
+    }
+
+    void AbortDrop()
+    {
+        TintObject(defaultColor.a, defaultColor);
+        transform.position = currentPosition;
+
+        if (lastHitObject != null)
+        {
+            lastHitObject.RayCastExit();
+            lastHitObject = null;
         }
     }
 
     public override bool DropObject()
     {
-        if (lastHitObject != null)
+        if (isSnapped)
         {
-            if (lastHitObject.IsValidDropLocation(this))
+            if (lastHitObject != null)
             {
-                if (CompareTag("Player"))
-                {
-                    SnapPlayerToGrid(lastHitObject.xPos, lastHitObject.yPos);
-                }
+                //actually lock the snap
+                var snapPos = GetSnapPosition(lastHitObject.xPos, lastHitObject.yPos);
+                this.transform.localPosition = snapPos;
+
+                currentX = lastHitObject.xPos;
+                currentY = lastHitObject.yPos;
+                currentPosition = snapPos;
+
+                //reset color after drop
+                TintObject(defaultColor.a, defaultColor);
+
                 if ((name == "Player1" && currentY == 9) || (name == "Player2" && currentY == 1))
                 {
                     GameManager.Instance.GameOver(this.gameObject.name);
@@ -45,46 +66,63 @@ public class Player : Draggable
                 lastHitObject = null;
                 return true;
             }
-            else
-            {
-                //reset object if drop is not valid
-                transform.position = currentPosition;
-            }
         }
 
-        //reset current object
-        if (lastHitObject != null)
-        {
-            lastHitObject.RayCastExit();
-            lastHitObject = null;
-            transform.position = currentPosition;
-        }
-        else
-        {
-            transform.position = currentPosition;
-        }
-
+        AbortDrop();
         return false;
     }
 
-    private void SnapPlayerToGrid(int x, int y)
+    private void UnsnapPlayer()
     {
-        if (x == currentX && y == currentY)
-        {
-            return;
-        }
+        lastHitObject.RayCastExit();
+        lastHitObject = null;
+        TintObject(defaultColor.a, defaultColor);
+        var pos = transform.position;
+        pos.y = liftHeight;
+        this.transform.position = pos;
+        isSnapped = false;
+    }
 
-        currentX = x;
-        currentY = y;
+    private void SnapPlayer()
+    {
+        var drop = lastHitObject;
+        bool invalidDrop = false;
+
+        Vector3 snapPos = GetSnapPosition(drop.xPos, drop.yPos);
+        transform.localPosition = snapPos;
+
+        if (!lastHitObject.IsValidDropLocation(this))
+        {
+            invalidDrop = true;
+        }
+        if (drop.xPos == currentX && drop.yPos == currentY)
+        {
+            Debug.Log("Same position Drop not valid.");
+            invalidDrop = true;
+        }
+        if (invalidDrop)
+        {
+            Debug.Log("Player drop invalid");
+            TintObject(0.5f, Color.red);
+        }
+        else
+        {
+            TintObject(0.5f, Color.green);
+            Debug.Log("Player drop is valid.");
+            isSnapped = true;
+        }
+    }
+
+    private Vector3 GetSnapPosition(int x, int y)
+    {
         //only look for player dropzones
         var playerzonesParent = GameObject.Find("DropZonesPlayer");
         var dropZone = playerzonesParent.GetComponentsInChildren<DropZone>().FirstOrDefault(zone => zone.xPos == x && zone.yPos == y);
 
-        Vector3 newPlayerPosition = dropZone.transform.position;
-        newPlayerPosition.y = placedHeight;
-        transform.position = newPlayerPosition;
-        currentPosition = newPlayerPosition;
-    }
+        Vector3 pos = dropZone.transform.position;
+        pos.y = placedHeight;
 
+        return pos;
+    }
 
 }

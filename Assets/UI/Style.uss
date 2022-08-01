@@ -46,7 +46,90 @@
     font-size: 93px;
     color: rgb(255, 255, 255);
     -unity-font-style: normal;
-    -unity-text-outline-color: rgba(0, 0, 0, 255);
+    -unity-text-outline-color: rgb(0, 0, 0);
     text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.52);
     -unity-text-outline-width: 0;
+}
+
+.button-round {
+    flex-grow: 0;
+    flex-direction: row;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 15px;
+    margin-bottom: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    -unity-font: url('/Assets/UI/neon.ttf');
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(0, 0, 0, 0.43);
+    border-right-color: rgba(0, 0, 0, 0.43);
+    border-top-color: rgba(0, 0, 0, 0.43);
+    border-bottom-color: rgba(0, 0, 0, 0.43);
+    border-top-left-radius: 45px;
+    border-bottom-left-radius: 45px;
+    border-top-right-radius: 45px;
+    border-bottom-right-radius: 45px;
+    background-image: resource('Icons/rotate_wall');
+}
+
+.button-round:hover {
+    flex-grow: 0;
+    flex-direction: row;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 15px;
+    margin-bottom: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    color: rgb(0, 0, 0);
+    background-color: rgb(231, 231, 231);
+    -unity-font: url('/Assets/UI/neon.ttf');
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(0, 0, 0, 0.43);
+    border-right-color: rgba(0, 0, 0, 0.43);
+    border-top-color: rgba(0, 0, 0, 0.43);
+    border-bottom-color: rgba(0, 0, 0, 0.43);
+    border-top-left-radius: 45px;
+    border-bottom-left-radius: 45px;
+    border-top-right-radius: 45px;
+    border-bottom-right-radius: 45px;
+    background-image: resource('Icons/rotate_wall');
+}
+
+.root-bg {
+    justify-content: center;
+    align-items: center;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    flex-grow: 1;
+    background-image: url('/Assets/Materials/Plank Textures/Planks5/textures/Planks5c.tif');
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: rgba(156, 156, 156, 255);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
 }

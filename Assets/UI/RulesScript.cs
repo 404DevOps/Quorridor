@@ -58,7 +58,7 @@ public class RulesScript : MonoBehaviour
         if (page.hasImage)
         {
             ruleImage.style.display = DisplayStyle.Flex;
-            ruleImage.style.backgroundImage = Background.FromTexture2D(Resources.Load<Texture2D>("Cropped/" + page.imagePath));
+            ruleImage.style.backgroundImage = Background.FromTexture2D(Resources.Load<Texture2D>("RuleImages/" + page.imagePath));
         }
         else 
         {

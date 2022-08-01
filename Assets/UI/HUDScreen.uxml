@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="Style.uss" />
+    <ui:VisualElement name="root" style="flex-grow: 1;">
+        <ui:VisualElement name="TopContainer" style="flex-grow: 1; flex-direction: row;">
+            <ui:VisualElement style="background-color: rgba(255, 255, 255, 0.59); margin-left: 10px; margin-top: 10px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; max-width: none; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; height: 64px; flex-direction: row; flex-wrap: nowrap; align-items: center; justify-content: center; width: 79px; flex-grow: 1;">
+                <ui:Label text="Current Player: Yellow" display-tooltip-when-elided="true" name="CurrentPlayer" style="padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; color: rgb(0, 0, 0); -unity-font-style: bold; font-size: 17px;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="background-color: rgba(255, 255, 255, 0.59); margin-left: 5px; margin-top: 5px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; max-width: none; padding-left: 21px; padding-right: 21px; padding-top: 21px; padding-bottom: 21px; height: auto; flex-direction: row; flex-wrap: nowrap; align-items: center; justify-content: flex-start; width: 540px; flex-grow: 1; flex-shrink: 1; display: flex; visibility: hidden;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="BottomContainer" style="flex-direction: row; flex-grow: 1; align-items: flex-end;">
+            <ui:VisualElement name="BottomLeft" style="flex-grow: 1; flex-direction: row;">
+                <ui:Button display-tooltip-when-elided="true" enable-rich-text="false" name="btnRotateWall" class="button-round" style="flex-direction: row; flex-grow: 1; flex-shrink: 1; flex-wrap: nowrap; position: relative; left: 5px; bottom: 5px; width: 75px; height: 75px; max-width: 75px; max-height: 75px; border-top-left-radius: 360px; border-bottom-left-radius: 360px; border-top-right-radius: 360px; border-bottom-right-radius: 360px; padding-left: -1px; padding-right: -1px; padding-top: -1px; padding-bottom: -1px; margin-left: 10px; margin-right: 10px; margin-top: 0; margin-bottom: 10px; -unity-background-scale-mode: stretch-to-fill; -unity-slice-left: 15; -unity-slice-top: 15; -unity-slice-right: 15; -unity-slice-bottom: 15;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="BottomRight" style="flex-grow: 1; flex-direction: row-reverse;">
+                <ui:Button display-tooltip-when-elided="true" enable-rich-text="false" name="btnRotateCam" class="button-round" style="flex-direction: row; flex-grow: 1; flex-shrink: 1; flex-wrap: nowrap; position: relative; left: 0; bottom: 0; width: 75px; height: 75px; max-width: 75px; max-height: 75px; border-top-left-radius: 50px; border-bottom-left-radius: 50px; border-top-right-radius: 50px; border-bottom-right-radius: 50px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-right: 30px; margin-top: 0; margin-bottom: 20px; background-image: resource(&apos;Icons/rotate_cam&apos;); -unity-slice-left: 15; -unity-slice-top: 15; -unity-slice-right: 15; -unity-slice-bottom: 15; justify-content: flex-end; align-items: flex-end;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -17,19 +17,9 @@ public class Wall : Draggable
     private BlockedPath presaveBlockedLeft;
     private BlockedPath presaveBlockedRight;
 
-    private Color defaultColor;
-    private Renderer render;
-
-    private bool snapped = false;
-
-    private void Start()
+    public void Rotate()
     {
-        render = GetComponent<Renderer>();
-        defaultColor = render.material.color;
-    }
-    internal void Rotate()
-    {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.R))
         {
             if (isHorizontal)
             {
@@ -97,20 +87,18 @@ public class Wall : Draggable
             lastHitLeft.RayCastExit();
             lastHitLeft = null;
 
-            //reset wall position
             UnsnapWall();
             Debug.Log("Not hitting Zones anymore");
-
         }
     }
 
     public void UnsnapWall()
     {
-        TintWall(defaultColor.a, defaultColor);
+        TintObject(defaultColor.a, defaultColor);
         var pos = transform.position;
         pos.y = liftHeight;
         this.transform.position = pos;
-        snapped = false;
+        isSnapped = false;
     }
 
     public void SnapWall(bool isGhost)
@@ -143,23 +131,29 @@ public class Wall : Draggable
             if (invalidDrop)
             {
                 Debug.Log("WallDrop is invalid.");
-                TintWall(0.5f, Color.red);
+                TintObject(0.5f, Color.red);
                 ResetRaycast();
             }
             else
             {
-                TintWall(0.5f, Color.green);
+                TintObject(0.5f, Color.green);
                 Debug.Log("WallDrop is valid.");
-                snapped = true;
+                isSnapped = true;
             }
         }
     }
 
-    public void TintWall(float alpha, Color color)
+    void Update()
     {
-        var c = color;
-        c.a = alpha;
-        render.material.color = c;
+      
+            if (this == GameManager.Instance.currentWall)
+            {
+                if (Input.touchCount == 2)
+                {
+                    Rotate();
+                }
+            }
+        
     }
 
     /// <summary>
@@ -169,13 +163,13 @@ public class Wall : Draggable
     public override bool DropObject()
     {
         //only drop if snapped to a position
-        if (snapped)
+        if (isSnapped)
         {
             var snapPos = GetSnapPosition(lastHitLeft.xPos, lastHitLeft.yPos, lastHitRight.xPos, lastHitRight.yPos);
             if (SnapWallToGrid(snapPos))
             {
                 //Reset Tint, set placed to true, set placement variables and add blocked paths
-                TintWall(defaultColor.a, defaultColor);
+                TintObject(defaultColor.a, defaultColor);
                 isPlaced = true;
                 placedLeft = new Coordinates(lastHitLeft.xPos, lastHitLeft.yPos);
                 placedRight = new Coordinates(lastHitRight.xPos, lastHitRight.yPos);
@@ -193,7 +187,7 @@ public class Wall : Draggable
 
     void AbortDrop()
     {
-        TintWall(defaultColor.a, defaultColor);
+        TintObject(defaultColor.a, defaultColor);
         transform.position = currentPosition;
         presaveBlockedLeft = null;
         presaveBlockedRight = null;
@@ -244,7 +238,7 @@ public class Wall : Draggable
         DropZone rightDrop = lastHitRight;
         if (isHorizontal)
         {
-            transform.position = snapPosition;
+            transform.localPosition = snapPosition;
 
             var blockedLeft = new BlockedPath(new Coordinates(leftDrop.xPos, leftDrop.yPos), new Coordinates(leftDrop.xPos, leftDrop.yPos + 1));
             var blockedRight = new BlockedPath(new Coordinates(rightDrop.xPos, rightDrop.yPos), new Coordinates(rightDrop.xPos, rightDrop.yPos + 1));
@@ -256,7 +250,7 @@ public class Wall : Draggable
         }
         else 
         {
-            transform.position = snapPosition;
+            transform.localPosition = snapPosition;
             var blockedLeft = new BlockedPath(new Coordinates(leftDrop.xPos, leftDrop.yPos), new Coordinates(leftDrop.xPos + 1, leftDrop.yPos));
             var blockedRight = new BlockedPath(new Coordinates(rightDrop.xPos, rightDrop.yPos), new Coordinates(rightDrop.xPos + 1, rightDrop.yPos));
 
@@ -327,21 +321,6 @@ public class Wall : Draggable
         return endZones;
     }
 
-    //bool IsThereWall(Vector3 position)
-    //{
-    //    //TODO, Check for Overlapping Walls.
-    //    var walls = GameObject.FindGameObjectsWithTag("Wall");
-    //    foreach (var wall in walls)
-    //    {
-    //        if (position == wall.transform.position)
-    //        {
-    //            Debug.Log("There is already a Wall on that Position");
-    //            return true;
-    //        }   
-    //    }
-
-    //    return false;
-    //}
     bool IsThereWall(int xLeft, int yLeft, int xRight, int yRight, Vector3 snapPos)
     {
         var coordsLeft = new Coordinates(xLeft, yLeft);

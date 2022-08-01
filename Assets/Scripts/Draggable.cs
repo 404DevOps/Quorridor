@@ -19,6 +19,19 @@ public abstract class Draggable : MonoBehaviour
     //Which Player can move this Object
     public int Owner;
 
+    internal Renderer render;
+    internal Color defaultColor;
+
+    internal bool isSnapped = false;
+
+    void Start()
+    {
+        render = GetComponent<Renderer>();
+        defaultColor = render.material.color;
+    }
+
+   
+
     #region Drag & Drop
     private void OnMouseDown()
     {
@@ -33,7 +46,10 @@ public abstract class Draggable : MonoBehaviour
         offset = transform.position - GetMouseWorldPos();
 
         //lift on mouse down
-        this.transform.position = new Vector3(transform.position.x, liftHeight, transform.position.z);
+        transform.position = new Vector3(transform.position.x, liftHeight, transform.position.z);
+
+        if (this is Wall)
+            GameManager.Instance.currentWall = (Wall)this;
     }
 
     private void OnMouseDrag()
@@ -55,6 +71,13 @@ public abstract class Draggable : MonoBehaviour
         }
     }
 
+    public void TintObject(float alpha, Color color)
+    {
+        var c = color;
+        c.a = alpha;
+        render.material.color = c;
+    }
+
     private void OnMouseUp()
     {
         if (Owner != GameManager.Instance.currentPlayer)
@@ -65,6 +88,8 @@ public abstract class Draggable : MonoBehaviour
 
         if (DropObject())
             GameManager.Instance.NextPlayer();
+
+        GameManager.Instance.currentWall = null;
         
     }
    

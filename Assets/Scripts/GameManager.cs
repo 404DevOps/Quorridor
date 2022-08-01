@@ -16,7 +16,9 @@ public class GameManager : MonoBehaviour
     public GameObject endGameMenu;
 
     //references
-    public HUD hud;
+    public HUDScript hud;
+
+    public Wall currentWall;
 
     public bool IsGameRunning { get; internal set; }
 
@@ -35,13 +37,14 @@ public class GameManager : MonoBehaviour
         IsGameRunning = true;
         blockedPaths = new List<BlockedPath>();
         pathFinder = new PathFinder();
+        //hud = FindObjectOfType<HUDScript>();
     }
 
     public void SetRandomPlayer()
     {
         var index = Random.Range(1, players.Length+1);
         currentPlayer = index;
-        hud.UpdateText();
+        hud.SwitchCurrentPlayer(currentPlayer == 1 ? true : false);
     }
 
     public void NextPlayer()
@@ -51,7 +54,7 @@ public class GameManager : MonoBehaviour
         else
             currentPlayer++;
 
-        hud.UpdateText();
+        hud.SwitchCurrentPlayer(currentPlayer == 1 ? true : false);
     }
 
     // Update is called once per frame
