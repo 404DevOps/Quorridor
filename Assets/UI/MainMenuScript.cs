@@ -20,14 +20,25 @@ public class MainMenuScript : MonoBehaviour
 
         startButton.clicked += StartButtonClicked;
         rulesButton.clicked += RulesButtonClicked;
+
+        startButton.RegisterCallback<MouseOverEvent>(MouseOver);
+        rulesButton.RegisterCallback<MouseOverEvent>(MouseOver);
+    }
+
+    void MouseOver(MouseOverEvent evt)
+    {
+        SoundEngine.Instance.PlayHover();
     }
 
     void StartButtonClicked() 
     {
+        SoundEngine.Instance.PlayClicked();
         SceneManager.LoadScene("Main", LoadSceneMode.Single);
+
     }
     void RulesButtonClicked()
     {
+        SoundEngine.Instance.PlayClicked();
         rulesPanel.SetActive(true);
         this.gameObject.SetActive(false);
     }

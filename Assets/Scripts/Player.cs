@@ -10,7 +10,8 @@ public class Player : Draggable
     public override void RayCastDropLocation()
     {
         RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var screenPos = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+        Ray ray = Camera.main.ScreenPointToRay(screenPos);
         int layermask = 1 << 6;
 
         Debug.DrawRay(ray.origin, ray.direction, Color.red);
@@ -37,6 +38,7 @@ public class Player : Draggable
 
         if (lastHitObject != null)
         {
+            SoundEngine.Instance.PlayBleep();
             lastHitObject.RayCastExit();
             lastHitObject = null;
         }
@@ -64,6 +66,7 @@ public class Player : Draggable
                     GameManager.Instance.GameOver(this.gameObject.name);
                 }
                 lastHitObject = null;
+                SoundEngine.Instance.PlayPlaced();
                 return true;
             }
         }
@@ -104,6 +107,7 @@ public class Player : Draggable
         {
             Debug.Log("Player drop invalid");
             TintObject(0.5f, Color.red);
+            isSnapped = false;
         }
         else
         {

@@ -40,6 +40,11 @@ public class RulesScript : MonoBehaviour
         next.clicked += NextPage;
         exit.clicked += Exit;
 
+        exit.RegisterCallback<MouseOverEvent>(MouseOver);
+        next.RegisterCallback<MouseOverEvent>(MouseOver);
+        previous.RegisterCallback<MouseOverEvent>(MouseOver);
+
+
         //initialize rule book
         currentPage = 0;
         previous.SetEnabled(false);
@@ -48,6 +53,16 @@ public class RulesScript : MonoBehaviour
 
         LoadPage(currentPage);
     }
+
+    void MouseOver(MouseOverEvent evt)
+    {
+        var caller = evt.currentTarget as Button;
+        if (caller.enabledSelf)
+        {
+            SoundEngine.Instance.PlayHover();
+        }
+    }
+
 
     void LoadPage(int pageNumber)
     {
@@ -78,6 +93,7 @@ public class RulesScript : MonoBehaviour
                 previous.SetEnabled(false);
 
             LoadPage(currentPage);
+            SoundEngine.Instance.PlayClicked();
         }
     }
     void NextPage()
@@ -91,12 +107,14 @@ public class RulesScript : MonoBehaviour
                 next.SetEnabled(false);
 
             LoadPage(currentPage);
+            SoundEngine.Instance.PlayClicked();
         }
     }
     void Exit()
     {
         mainMenu.SetActive(true);
         gameObject.SetActive(false);
+        SoundEngine.Instance.PlayClicked();
     }
 }
 

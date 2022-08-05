@@ -31,6 +31,7 @@ public class Wall : Draggable
             }
 
             isHorizontal = !isHorizontal;
+            SoundEngine.Instance.PlayRotate();
             ResetRaycast();
         } 
     }
@@ -132,6 +133,7 @@ public class Wall : Draggable
             {
                 Debug.Log("WallDrop is invalid.");
                 TintObject(0.5f, Color.red);
+                isSnapped = false;
                 ResetRaycast();
             }
             else
@@ -177,6 +179,7 @@ public class Wall : Draggable
                 GameManager.Instance.blockedPaths.Add(presaveBlockedLeft);
                 GameManager.Instance.blockedPaths.Add(presaveBlockedRight);
 
+                SoundEngine.Instance.PlayPlaced();
                 return true;
             }
         }
@@ -193,6 +196,12 @@ public class Wall : Draggable
         presaveBlockedRight = null;
         ResetRaycast();
         ResetWallRotation();
+        if (lastHitLeft != null || lastHitRight != null)
+        {
+            lastHitLeft = null;
+            lastHitRight = null;
+            SoundEngine.Instance.PlayBleep();
+        }
     }
 
     void ResetRaycast()

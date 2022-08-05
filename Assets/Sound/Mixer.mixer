@@ -1,0 +1,139 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!243 &-5730723486765279122
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: FX
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 4b1abcf59f237d04eb229f1fdaceb20b
+  m_Children: []
+  m_Volume: 1c9b388bb96887a4d9899a2fa0dbbb24
+  m_Pitch: a3cd5a65bb8cc9d439f994961f52883d
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -2505277531315227958}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!243 &-4900311224216868081
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: BGLoop
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: f0700a34419e05f459178260dfc1fbbf
+  m_Children: []
+  m_Volume: 7742f5d9a2048714cb8e0bc8d2c21e63
+  m_Pitch: 9ceed5570d3b9074babb36cb63520505
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -760034535980887353}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!244 &-2505277531315227958
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 50a00623a0212eb4ab7fd20a071fbcdf
+  m_EffectName: Attenuation
+  m_MixLevel: f3ff833668d5e1649b5fed3d3f956b29
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!244 &-760034535980887353
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: bd7c0de31fe640a499741f3b8bf7f835
+  m_EffectName: Attenuation
+  m_MixLevel: 316faa7cf3826634ba0fd7aa173d42bf
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!241 &24100000
+AudioMixerController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Mixer
+  m_OutputGroup: {fileID: 0}
+  m_MasterGroup: {fileID: 24300002}
+  m_Snapshots:
+  - {fileID: 24500006}
+  m_StartSnapshot: {fileID: 24500006}
+  m_SuspendThreshold: -80
+  m_EnableSuspend: 1
+  m_UpdateMode: 0
+  m_ExposedParameters: []
+  m_AudioMixerGroupViews:
+  - guids:
+    - 57f69a3b506567f4b8a88e7f5474d985
+    - 4b1abcf59f237d04eb229f1fdaceb20b
+    - f0700a34419e05f459178260dfc1fbbf
+    name: View
+  m_CurrentViewIndex: 0
+  m_TargetSnapshot: {fileID: 24500006}
+--- !u!243 &24300002
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Master
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 57f69a3b506567f4b8a88e7f5474d985
+  m_Children:
+  - {fileID: -5730723486765279122}
+  - {fileID: -4900311224216868081}
+  m_Volume: 26b3424aedb515843a88efe442363f3f
+  m_Pitch: 6f1f9f57d22cf6d4ab83d484e7a117cb
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: 24400004}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!244 &24400004
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: e8dab903cff64ce42adb94f5aa1e74fe
+  m_EffectName: Attenuation
+  m_MixLevel: 51ac0dc4e9f425d41997bc288c30b347
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!245 &24500006
+AudioMixerSnapshotController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Snapshot
+  m_AudioMixer: {fileID: 24100000}
+  m_SnapshotID: 4ba940fbf56694743a178f620fbc32dc
+  m_FloatValues:
+    1c9b388bb96887a4d9899a2fa0dbbb24: -6.5566154
+  m_TransitionOverrides: {}

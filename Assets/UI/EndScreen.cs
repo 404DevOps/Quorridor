@@ -23,15 +23,23 @@ public class EndScreen : MonoBehaviour
         playerWonText.text = "Player " + player + " wins the Game!";
         playerWonText.style.color = player == 1 ? Color.yellow : Color.blue;
         backToMenu.clicked += BackToMenu;
+        backToMenu.RegisterCallback<MouseOverEvent>(MouseOver);
+
 
         //disable HUD
         FindObjectOfType<HUDScript>().gameObject.SetActive(false);
-        
+
+    }
+
+    void MouseOver(MouseOverEvent evt)
+    {
+        SoundEngine.Instance.PlayHover();
     }
 
     // Update is called once per frame
     void BackToMenu()
     {
+        SoundEngine.Instance.PlayClicked();
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 }
